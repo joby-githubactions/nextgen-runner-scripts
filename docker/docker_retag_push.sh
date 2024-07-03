@@ -8,10 +8,11 @@ source ~/tools/trivy_scan.sh
 
 #------------------------EXPECTED VARIABLES-----------------------
 validate_variable "IMAGE_NAME"
-validate_variable "IMAGE_LATEST_TAG"
 validate_variable "IMAGE_TAG"
-validate_variable "IMAGE_PULL_TAG"
+validate_variable "IMAGE_LATEST_TAG"
 validate_variable "DOCKER_IMAGE_PUSH_PREFIX"
+
+validate_variable "IMAGE_PULL_TAG"
 validate_variable "DOCKER_IMAGE_PULL_PREFIX"
 #----------------------EO-EXPECTED VARIABLES----------------------
 

@@ -7,12 +7,12 @@ source ~/shared/utils.sh
 source ~/tools/trivy_scan.sh
 
 #----------------------EXPECTED VARIABLES----------------------
-validate_variable "DOCKER_IMAGE_PUSH_PREFIX"
 validate_variable "IMAGE_NAME"
 validate_variable "IMAGE_TAG"
 validate_variable "IMAGE_LATEST_TAG"
-validate_variable "DOCKER_FILE_PATH"
 validate_variable "DOCKER_IMAGE_PUSH_PREFIX"
+
+validate_variable "DOCKER_FILE_PATH"
 #----------------------EO-EXPECTED VARIABLES----------------------
 
 # Set the DOCKER_HOST environment variable
