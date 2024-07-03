@@ -1,15 +1,22 @@
 #!/bin/bash
 
-# Source the generic.sh file
-source generic.sh
+# Source the shared scripts
+source ~/docker/env_variables_docker.sh
+source ~/docker/validate_variables.sh
+source ~/shared/utils.sh
+source ~/tools/trivy_scan.sh
+
+#------------------------EXPECTED VARIABLES-----------------------
+validate_variable "IMAGE_NAME"
+validate_variable "IMAGE_LATEST_TAG"
+validate_variable "IMAGE_TAG"
+validate_variable "IMAGE_PULL_TAG"
+validate_variable "DOCKER_IMAGE_PUSH_PREFIX"
+validate_variable "DOCKER_IMAGE_PULL_PREFIX"
+#----------------------EO-EXPECTED VARIABLES----------------------
 
 # Set the DOCKER_HOST environment variable
 export DOCKER_HOST="tcp://localhost:2375"
-
-IMAGE_NAME="${IMAGE_NAME:-nextgen-image}"
-IMAGE_PULL_TAG="${IMAGE_PULL_TAG:-$IMAGE_LATEST_TAG}"
-IMAGE_LATEST_TAG="${IMAGE_LATEST_TAG:-latest}"
-IMAGE_TAG="${IMAGE_TAG:-$IMAGE_LATEST_TAG}"
 
 #DOCKER_IMAGE_PUSH_PREFIX &  DOCKER_IMAGE_PUSH_PREFIX are from azure-pipelines.yaml
 pull_image="$DOCKER_IMAGE_PULL_PREFIX/$IMAGE_NAME:$IMAGE_PULL_TAG"

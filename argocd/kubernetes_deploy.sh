@@ -1,8 +1,9 @@
 #!/bin/bash
 #set -e
 
-# Source the generic.sh file
-source generic.sh
+# Source the shared scripts
+source shared/env_variables.sh
+source shared/utils.sh
 
 resource_path=$(pwd)
 argofolder=$resource_path"/argocd/argocd-template"

@@ -1,54 +1,24 @@
 #!/bin/bash
 
-function print_color() {
-    color=$1
-    text=$2
-    echo -e "\033[${color}m${text}\033[0m"
-}
-function escape_slashes() {
-    local input_string="$1"
-    local escaped_string=$(echo "$input_string" | sed 's/\//\\\//g')
-    echo "$escaped_string"
-}
-
-function gitCommitterName(){
-    local git_committer_name=$(git -C . log -1 --pretty=format:'%an')
-    echo "${git_committer_name//[^a-zA-Z]/_}"
-}
-
-function gitCommitterEmail(){
-	local git_committer_email=$(git -C . log -1 --pretty=format:'%ae')
-	echo "${git_committer_email}"
-}
-
-function gitCommitUrl(){
-    local input_url=$(git config --get remote.origin.url)
-    local git_hash_id=$(git rev-parse HEAD)
-	echo "${input_url/tatasteel-dod@/}/commit/${git_hash_id}"
-}
-
-function gitCommitMessage(){
-    local git_commit_message=$(git log -1 --pretty=%B)
-    git_commit_message="$(echo "$git_commit_message" | tr -d '\n' | tr -d "'" | tr -d '"')"
-    echo "${git_commit_message}"
-}
-
+# Function to run Trivy vulnerability scan on a Docker image
 function run_trivy_scan() {
     trivy_folder_path="$(pwd)/trivy/"
     
-    rm -rf $trivy_folder_path
+    # Create or clean up Trivy results directory
+    rm -rf "$trivy_folder_path"
     mkdir -p "$trivy_folder_path"
     
     local docker_image="$1"
     local trivy_results_xml_path="${trivy_folder_path}report-high-crit.xml"
     local trivy_results_html_path="${trivy_folder_path}report-high-crit.html"
 
+    # Print message indicating start of scanning
     print_color "32;1" "Scanning Docker Image: $docker_image"
 
     # Run Trivy scan and generate JUnit report
     trivy -d image --severity HIGH,CRITICAL --ignore-unfixed --format template --template @/usr/local/share/trivy/templates/junit.tpl -o "$trivy_results_xml_path" "$docker_image"
 
-    # Run Trivy scan and generate Html report
+    # Run Trivy scan and generate HTML report
     trivy -d image --severity HIGH,CRITICAL --ignore-unfixed --format template --template @/usr/local/share/trivy/templates/html.tpl -o "$trivy_results_html_path" "$docker_image"
 
     # Print Trivy scan results in tabular format
@@ -56,9 +26,23 @@ function run_trivy_scan() {
 
     # Check if Trivy identified HIGH or CRITICAL vulnerabilities
     if grep -q '<failure message="' "$trivy_results_xml_path"; then
-        # Fail the build if vulnerabilities are found
+        # Print message about vulnerabilities found
         print_color "34;1" "Trivy found HIGH or CRITICAL vulnerabilities. Build failed."
-       #Disabled the exit as of now
-       # exit 1  
+        # Optionally exit the script if you want to fail the build
+        # exit 1
     fi
 }
+
+# Check if script is being executed or sourced
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    # If script is executed directly, run Trivy scan with provided Docker image argument
+    if [ $# -ne 1 ]; then
+        echo "Usage: $0 <docker_image>"
+        exit 1
+    fi
+    run_trivy_scan "$1"
+fi
+
+
+## USAGE 
+# ./trivy_scan.sh my-docker-image:latest

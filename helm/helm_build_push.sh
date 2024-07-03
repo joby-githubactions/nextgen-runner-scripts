@@ -1,6 +1,10 @@
 #!/bin/bash
 #set -e
 
+# Source the shared scripts
+source shared/env_variables.sh
+source shared/utils.sh
+
 #-----------------------Expected Variables------------------------
 #BUILD_SOURCEBRANCH='development'
 #BUILD_BUILDNUMBER='20231205.7'
@@ -32,8 +36,7 @@ cp -r $template_folder $cicd_resources_path
 chartfolder=$cicd_resources_path"/helm-template"
 
 #-----------------------ENV_VARIABLES------------------------
-# Source the generic.sh file
-source $resource_path/utils/generic.sh
+
 cd $BUILD_SOURCESDIRECTORY
 git_committer_name=$(gitCommitterName)
 git_committer_email=$(gitCommitterEmail)
