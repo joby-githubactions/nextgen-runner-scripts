@@ -36,6 +36,11 @@ chartfolder=$cicd_resources_path"/helm-template"
 
 #-----------------------ENV_VARIABLES------------------------
 
+# Escape slashes in paths if needed
+export APPLICATION_HEALTH_READINESS_PATH=$(escape_slashes "$APPLICATION_HEALTH_READINESS_PATH")
+export APPLICATION_HEALTH_LIVENESS_PATH=$(escape_slashes "$APPLICATION_HEALTH_LIVENESS_PATH")
+export IMAGE_REPOSITORY=$(escape_slashes "$IMAGE_REPOSITORY")
+
 # Validate and print all unique variables
 validate_variable "BUILD_VERSION"
 validate_variable "NAMESPACE"

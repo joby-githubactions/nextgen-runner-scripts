@@ -57,9 +57,3 @@ export SOURCE_BRANCH="${SOURCE_BRANCH:-$(get_git_branch_name)}"
 export HELM_CHART="${resource_path}/${APPLICATION_NAME}-${BUILD_VERSION}.tgz"
 
 export HELM_OCI_URL="${HELM_OCI_URL:-oci://\$DOCKER_IMAGE_PUSH_PREFIX/helm/}"
-
-# Escape slashes in paths if needed
-APPLICATION_HEALTH_READINESS_PATH=$(escape_slashes "$APPLICATION_HEALTH_READINESS_PATH")
-APPLICATION_HEALTH_LIVENESS_PATH=$(escape_slashes "$APPLICATION_HEALTH_LIVENESS_PATH")
-IMAGE_REPOSITORY=$(escape_slashes "$IMAGE_REPOSITORY")
-
