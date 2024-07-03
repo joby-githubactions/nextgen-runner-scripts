@@ -4,12 +4,6 @@ metadata:
   name: ##APPLICATION_NAME##
   namespace: argocd
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argocdnotification-##ENVIRONMENT_STAGE##
-    notifications.argoproj.io/subscribe.on-deleted.slack: argocdnotification-##ENVIRONMENT_STAGE##
-    notifications.argoproj.io/subscribe.on-deployed.slack: argocdnotification-##ENVIRONMENT_STAGE##
-    notifications.argoproj.io/subscribe.on-health-degraded.slack: argocdnotification-##ENVIRONMENT_STAGE##
-    notifications.argoproj.io/subscribe.on-sync-failed.slack: argocdnotification-##ENVIRONMENT_STAGE##
-    notifications.argoproj.io/subscribe.on-sync-status-unknown.slack: argocdnotification-##ENVIRONMENT_STAGE##
     maintainer-name: "##MAINTAINER_NAME##"
     maintainer-email: "##MAINTAINER_EMAIL##"
     git-commit-url: "##GIT_COMMIT_URL##"
@@ -19,7 +13,7 @@ spec:
   revisionHistoryLimit: 5  
   source:
     repoURL: "##REPO_URL##"
-    targetRevision: "##PIPELINE_ID##"
+    targetRevision: "##BUILD_VERSION##"
     chart: helm/##APPLICATION_NAME##
   destination:
     server: https://kubernetes.default.svc
@@ -53,5 +47,7 @@ spec:
       value: '##MAINTAINER_NAME##'        
     - name: 'Maintainer Email:'
       value: '##MAINTAINER_EMAIL##'        
-    - name: 'Pipeline ID:'
-      value: '##PIPELINE_ID##' 
+    - name: 'Build Version:'
+      value: '##BUILD_VERSION##' 
+    - name: 'Git Commit Id:'
+      value: '##GIT_COMMIT_ID##' 

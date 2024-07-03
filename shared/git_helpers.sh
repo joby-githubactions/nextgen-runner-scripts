@@ -35,6 +35,11 @@ function get_git_commit_url(){
     echo "${input_url/tatasteel-dod@/}/commit/${git_hash_id}"
 }
 
+# Function to get the current Git commit ID (hash)
+function get_git_commit_id(){
+    git rev-parse HEAD
+}
+
 # Function to get the Git commit message
 function get_git_commit_message(){
     local git_commit_message=$(git log -1 --pretty=%B)

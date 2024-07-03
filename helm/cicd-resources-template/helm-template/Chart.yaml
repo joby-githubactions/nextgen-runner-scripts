@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ##APPLICATION_NAME##
-description: "Helm chart for kubernetes deployment of ##APPLICATION_NAME##. Pipeline Id: ##PIPELINE_ID##. Maintained by ##MAINTAINER_EMAIL##"
+description: "Helm chart for kubernetes deployment of ##APPLICATION_NAME##. Build Version: ##BUILD_VERSION##. Maintained by ##MAINTAINER_EMAIL##"
 
 # A chart can be either an 'application' or a 'library' chart.
 #

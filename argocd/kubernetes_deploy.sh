@@ -1,25 +1,27 @@
 #!/bin/bash
-#set -e
+set -e  # comment to avoid exit on any error
+SCRIPT_PATH="${HOME}/nextgen-runner-scripts"
+source ${SCRIPT_PATH}/argocd/env_variables_argocd.sh
 
 # Source the shared scripts
-source shared/env_variables.sh
-source shared/utils.sh
+source ${SCRIPT_PATH}/shared/validate_variables.sh
+source ${SCRIPT_PATH}/shared/utils.sh
 
-resource_path=$(pwd)
-argofolder=$resource_path"/argocd/argocd-template"
-application_name=$BUILD_REPOSITORY_NAME
+argofolder="${SCRIPT_PATH}/argocd/argocd-template"
 
-cd $BUILD_SOURCESDIRECTORY
-git_committer_name=$(gitCommitterName)
-git_committer_email=$(gitCommitterEmail)
-git_commit_url=$(gitCommitUrl)
-git_commit_message=$(gitCommitMessage)
-pipeline_id=$(echo $BUILD_BUILDNUMBER | sed 's/refs\/heads\///')
-namespace="dod"
-docker_host=${DOCKER_IMAGE_PUSH_PREFIX:-blueharvest}
-source_branch=$(basename "$BUILD_SOURCEBRANCH")
-environment_stage=$BUILD_ENVIRONMENT
-
+# Validate mandatory variables
+#------------------------EXPECTED VARIABLES-----------------------
+validate_variable "BUILD_VERSION"
+validate_variable "DOCKER_IMAGE_PUSH_PREFIX"
+validate_variable "NAMESPACE"
+validate_variable "APPLICATION_NAME"
+validate_variable "GIT_COMMITTER_NAME"
+validate_variable "GIT_COMMITTER_EMAIL"
+validate_variable "GIT_COMMIT_URL"
+validate_variable "GIT_COMMIT_MESSAGE"
+validate_variable "GIT_COMMIT_ID"
+validate_variable "SOURCE_BRANCH"
+#----------------------EO-EXPECTED VARIABLES----------------------
 
 ###### ARGOCD ADJUSTMENTS ##########
 echo "Adjusting argocd application.yaml"
@@ -28,16 +30,16 @@ argocd_template=$argofolder/application.yaml
 temp_file=$(mktemp /tmp/application.yaml.XXXXXX)
 # Replace variables in the file using sed
 sed \
-    -e "s|##APPLICATION_NAME##|${application_name}|g" \
-    -e "s|##MAINTAINER_NAME##|${git_committer_name}|g" \
-    -e "s|##MAINTAINER_EMAIL##|${git_committer_email}|g" \
-    -e "s|##GIT_COMMIT_URL##|${git_commit_url}|g" \
-    -e "s|##GIT_COMMIT_MESSAGE##|${git_commit_message}|g" \
-    -e "s|##PIPELINE_ID##|${pipeline_id}|g" \
-    -e "s|##NAMESPACE##|${namespace}|g" \
-    -e "s|##REPO_URL##|${docker_host}|g" \
-    -e "s|##SOURCE_BRANCH##|${source_branch}|g" \
-    -e "s|##ENVIRONMENT_STAGE##|${environment_stage}|g" \
+    -e "s|##APPLICATION_NAME##|${APPLICATION_NAME}|g" \
+    -e "s|##MAINTAINER_NAME##|${GIT_COMMITTER_NAME}|g" \
+    -e "s|##MAINTAINER_EMAIL##|${GIT_COMMITTER_EMAIL}|g" \
+    -e "s|##GIT_COMMIT_URL##|${GIT_COMMIT_URL}|g" \
+    -e "s|##GIT_COMMIT_MESSAGE##|${GIT_COMMIT_MESSAGE}|g" \
+    -e "s|##BUILD_VERSION##|${BUILD_VERSION}|g" \
+    -e "s|##NAMESPACE##|${NAMESPACE}|g" \
+    -e "s|##REPO_URL##|${DOCKER_IMAGE_PUSH_PREFIX}|g" \
+    -e "s|##SOURCE_BRANCH##|${SOURCE_BRANCH}|g" \
+    -e "s|##GIT_COMMIT_ID##|${GIT_COMMIT_ID}|g" \
     "${application_yaml_template}" > "$temp_file"
 # Move the temporary file back to the original file
 mv "$temp_file" "$argocd_template"

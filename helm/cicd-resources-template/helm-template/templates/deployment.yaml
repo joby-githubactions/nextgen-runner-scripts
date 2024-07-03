@@ -38,12 +38,6 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://config-server:8888
-            - name: SPRING_CLOUD_CONFIG_USERNAME
-              value: {{ .Values.configserver.username }}
-            - name: SPRING_CLOUD_CONFIG_PASSWORD
-              value: {{ .Values.configserver.password }}
           {{- include "helpers.include-envfrom" . | indent 10 }}
           ports:
             - name: defaulthttp
