@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#SCRIPT_PATH="${HOME}/scripts"
+#SCRIPTS_PATH="${HOME}/scripts"
 
 # Source utils.sh for utility functions
-source ${SCRIPT_PATH}/shared/git_helpers.sh
-source ${SCRIPT_PATH}/shared/utils.sh
+source ${SCRIPTS_PATH}/shared/git_helpers.sh
+source ${SCRIPTS_PATH}/shared/utils.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
 export BUILD_VERSION="${GITHUB_RUN_ID}"

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SCRIPT_PATH="${HOME}/actions-runner/scripts"
+#SCRIPTS_PATH="${HOME}/actions-runner/scripts"
 
 # Source utils.sh for utility functions
-source ${SCRIPT_PATH}/shared/git_helpers.sh
+source ${SCRIPTS_PATH}/shared/git_helpers.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
 export BUILD_VERSION="${GITHUB_RUN_ID}"

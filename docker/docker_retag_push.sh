@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e  # comment to avoid exit on any error
 
-#SCRIPT_PATH="${HOME}/actions-runner/scripts"
+#SCRIPTS_PATH="${HOME}/actions-runner/scripts"
 
-source ${SCRIPT_PATH}/docker/env_variables_docker.sh
+source ${SCRIPTS_PATH}/docker/env_variables_docker.sh
 
 # Source the shared scripts
-source ${SCRIPT_PATH}/shared/validate_variables.sh
-source ${SCRIPT_PATH}/shared/utils.sh
-source ${SCRIPT_PATH}/tools/trivy_scan.sh
+source ${SCRIPTS_PATH}/shared/validate_variables.sh
+source ${SCRIPTS_PATH}/shared/utils.sh
+source ${SCRIPTS_PATH}/tools/trivy_scan.sh
 
 #------------------------EXPECTED VARIABLES-----------------------
 validate_variable "APPLICATION_NAME"

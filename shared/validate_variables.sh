@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SCRIPT_PATH="${HOME}/scripts"
+#SCRIPTS_PATH="${HOME}/scripts"
 
 # Source utils.sh for utility functions
-source "${SCRIPT_PATH}/shared/utils.sh"
+source "${SCRIPTS_PATH}/shared/utils.sh"
 
 validate_variable() {
     local var_name="$1"

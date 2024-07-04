@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SCRIPT_PATH="${HOME}/actions-runner/scripts"
+#SCRIPTS_PATH="${HOME}/actions-runner/scripts"
 
 # Source utils.sh for utility functions
-source ${SCRIPT_PATH}/shared/git_helpers.sh
+source ${SCRIPTS_PATH}/shared/git_helpers.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
 export BUILD_VERSION="${GITHUB_RUN_ID}"
@@ -34,4 +34,4 @@ export DOCKER_FILE_PATH="${DOCKER_FILE_PATH:-.}"
 export DOCKER_IMAGE_PULL_PREFIX="${DOCKER_IMAGE_PULL_PREFIX:-${DOCKER_IMAGE_PUSH_PREFIX}}"
 
 # Set the DOCKER_HOST environment variable
-export DOCKER_HOST="tcp://localhost:2375"
+#export DOCKER_HOST="tcp://localhost:2375"

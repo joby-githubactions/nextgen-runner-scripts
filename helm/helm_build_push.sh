@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e  # comment to avoid exit on any error
 
-#SCRIPT_PATH="${HOME}/scripts"
+#SCRIPTS_PATH="${HOME}/scripts"
 
-source ${SCRIPT_PATH}/helm/env_variables_helm.sh
+source ${SCRIPTS_PATH}/helm/env_variables_helm.sh
 
 # Source the shared scripts
-source ${SCRIPT_PATH}/shared/validate_variables.sh
+source ${SCRIPTS_PATH}/shared/validate_variables.sh
 #-----------------------Expected Variables------------------------
 #BUILD_SOURCEBRANCH='development'
 #BUILD_BUILDNUMBER='20231205.7'
@@ -28,8 +28,8 @@ echo "Creating cicd_resources_path folder"
 
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
-template_folder="${SCRIPT_PATH}/helm/cicd-resources-template"
-cicd_resources_path="${SCRIPT_PATH}/helm/cicd-resources"
+template_folder="${SCRIPTS_PATH}/helm/cicd-resources-template"
+cicd_resources_path="${SCRIPTS_PATH}/helm/cicd-resources"
 
 rm -rf "$cicd_resources_path"
 cp -r $template_folder $cicd_resources_path

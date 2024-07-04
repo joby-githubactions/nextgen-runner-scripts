@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e  # Exit on any error
 
-#SCRIPT_PATH="${HOME}/scripts"
-source "${SCRIPT_PATH}/shared/utils.sh"
+#SCRIPTS_PATH="${HOME}/scripts"
+source "${SCRIPTS_PATH}/shared/utils.sh"
 
 # Function to run Trivy vulnerability scan on a Docker image
 function run_trivy_scan() {
-    trivy_folder_path="${SCRIPT_PATH}/trivy/"
+    trivy_folder_path="${SCRIPTS_PATH}/trivy/"
     
     # Create or clean up Trivy results directory
     rm -rf "${trivy_folder_path}"
