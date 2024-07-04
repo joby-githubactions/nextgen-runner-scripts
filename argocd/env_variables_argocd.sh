@@ -1,5 +1,5 @@
 #!/bin/bash
-SCRIPT_PATH="${HOME}/nextgen-runner-scripts"
+SCRIPT_PATH="${HOME}/scripts"
 
 # Source utils.sh for utility functions
 source ${SCRIPT_PATH}/shared/git_helpers.sh
