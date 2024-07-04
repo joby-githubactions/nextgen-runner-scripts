@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e  # Exit on any error
 
-SCRIPT_PATH="${HOME}/scripts"
+#SCRIPT_PATH="${HOME}/scripts"
 source "${SCRIPT_PATH}/shared/utils.sh"
 
 # Function to run Trivy vulnerability scan on a Docker image

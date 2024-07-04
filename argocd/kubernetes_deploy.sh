@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e  # comment to avoid exit on any error
-SCRIPT_PATH="${HOME}/scripts"
+#SCRIPT_PATH="${HOME}/actions-runner/scripts"
+
 source ${SCRIPT_PATH}/argocd/env_variables_argocd.sh
 
 # Source the shared scripts

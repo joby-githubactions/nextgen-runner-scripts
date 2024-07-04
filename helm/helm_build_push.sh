@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e  # comment to avoid exit on any error
-SCRIPT_PATH="${HOME}/scripts"
+
+#SCRIPT_PATH="${HOME}/scripts"
+
 source ${SCRIPT_PATH}/helm/env_variables_helm.sh
 
 # Source the shared scripts

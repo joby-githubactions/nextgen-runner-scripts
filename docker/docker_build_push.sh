@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e  # comment to avoid exit on any error
 
-SCRIPT_PATH="${HOME}/scripts"
+#SCRIPT_PATH="${HOME}/actions-runner/scripts"
+
 source ${SCRIPT_PATH}/docker/env_variables_docker.sh
 
 # Source the shared scripts
