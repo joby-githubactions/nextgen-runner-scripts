@@ -7,7 +7,8 @@ source ${SCRIPTS_PATH}/shared/git_helpers.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
 export BUILD_VERSION="${GITHUB_RUN_ID}"
-
+#to run git commands
+export GIT_DIR="${GITHUB_WORKSPACE}/.git"
 # -----------------------MANDATORY VARIABLES-----------------------
 
 # Note: Based on the branching strategy IMAGE_PULL_TAG needed to be provided

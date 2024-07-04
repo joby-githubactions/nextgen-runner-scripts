@@ -7,6 +7,8 @@ source ${SCRIPTS_PATH}/shared/git_helpers.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
 export BUILD_VERSION="${GITHUB_RUN_ID}"
+#to run git commands
+export GIT_DIR="${GITHUB_WORKSPACE}/.git"
 # -----------------------MANDATORY VARIABLES-----------------------
 export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"  ##DOCKER_HOST
 export NAMESPACE="${NAMESPACE}"
