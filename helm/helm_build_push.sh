@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e  # comment to avoid exit on any error
 
 #SCRIPTS_PATH="${HOME}/scripts"
@@ -8,9 +9,6 @@ source ${SCRIPTS_PATH}/helm/env_variables_helm.sh
 # Source the shared scripts
 source ${SCRIPTS_PATH}/shared/validate_variables.sh
 
-helm_template_output="${SCRIPTS_PATH}/outputs/helm-template/"
-rm -rf "${trivy_folder_path}"
-mkdir -p "${trivy_folder_path}"
 #-----------------------Expected Variables------------------------
 #BUILD_SOURCEBRANCH='development'
 #BUILD_BUILDNUMBER='20231205.7'
