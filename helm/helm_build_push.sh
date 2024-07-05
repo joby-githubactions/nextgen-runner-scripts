@@ -5,31 +5,56 @@ set -e  # comment to avoid exit on any error
 #SCRIPTS_PATH="${HOME}/scripts"
 
 source ${SCRIPTS_PATH}/helm/env_variables_helm.sh
-
-# Source the shared scripts
 source ${SCRIPTS_PATH}/shared/validate_variables.sh
+source ${SCRIPTS_PATH}/shared/utils.sh
 
-#-----------------------Expected Variables------------------------
-#BUILD_SOURCEBRANCH='development'
-#BUILD_BUILDNUMBER='20231205.7'
-#BUILD_REPOSITORY_NAME="hell0-world"
-#PROJECT_VARIABLES='{"dev":{"secrets":{"DATABASE_URL":"jdbc:mysql://localhost:3306/mydatabase","REDIS_HOST":"localhost","API_KEY":"abc123"},"envs":{"DATABASE_URL":"jdbc:mysql://localhost:3306/mydatabase","REDIS_HOST":"localhost","API_KEY":"abc123"}},"qa":{"envs":{"DATABASE_URL":"jdbc:mysql://localhost:3306/mydatabase","REDIS_HOST":"localhost","API_KEY":"aas"}},"envs":{"env":{"DATABASE_URL":"jdbc:mysql://localhost:3306/mydatabase","REDIS_HOST":"localhost","API_KEY":"prod"}}}'
+###########################################################
+#
+#               CUSTOM_PROJECT_VARIABLES
+###########################################################
+#
+# Functionality:
+#   - Dynamically binds environment variables and creates Kubernetes secrets based on the GitLab Runner branch.
+#   - Facilitates deployment of applications with different configurations without script modification.
+#
+# Example JSON `CUSTOM_PROJECT_VARIABLES`:
+# {
+#   "development": {
+#     "secrets": {
+#       "DATABASE_URL": "jdbc:mysql://localhost:3306/mydatabase",
+#       "REDIS_HOST": "localhost",
+#       "API_KEY": "abc123"
+#     },
+#     "envs": {
+#       "DATABASE_URL": "jdbc:mysql://localhost:3306/mydatabase",
+#       "REDIS_HOST": "localhost",
+#       "API_KEY": "abc123"
+#     }
+#   },
+#   "master": {
+#     "envs": {
+#       "DATABASE_URL": "jdbc:mysql://localhost:3306/mydatabase",
+#       "REDIS_HOST": "localhost",
+#       "API_KEY": "aas"
+#     }
+#   }
+# }
+#
+# Note:
+#   - Customize `CUSTOM_PROJECT_VARIABLES` with actual sensitive information for `DATABASE_URL`, `REDIS_HOST`, `API_KEY`, and any other variables required by your project.
+#   - Secrets (`secrets` key) will create Kubernetes secrets and bind them to the deployment.
+#   - Environment variables (`envs` key) will configure environment variables attached to the deployment YAML.
+###########################################################
 
-# TEST
-#source_dir="/Users/joby/Documents/data/projects/helm/cicd-resources-template"
-#destination_dir="./cicd-resources-template"
-#rm -rf $destination_dir
-#mkdir -p "$destination_dir"
-#cp -r "$source_dir"/* "$destination_dir"
-# call helmBuildAndPush.sh
-#-----------------------Expected Variables------------------------
+
 
 # dos2unix deploy.sh
 
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
 helm_reference_template_folder="${SCRIPTS_PATH}/helm/helm-reference-template"
-helm_template_folder="${SCRIPTS_PATH}/outputs/helm-template"
+output_folder="${SCRIPTS_PATH}/outputs"
+helm_template_folder="${output_folder}/helm-template"
 
 echo "Copying ${helm_reference_template_folder} to ${helm_template_folder}"
 
@@ -74,6 +99,8 @@ validate_variable "HELM_OCI_URL"
 
 #This will be used for custom properties for different enviornments on the deployment side
 environment_stage=$SOURCE_BRANCH
+
+print_color "32;1" "Building Helm Template: ${helm_template_folder}"
 
 ###### HELM Chart ADJUSTMENTS ##########
 #-----_helpers.tpl-------#
@@ -129,7 +156,7 @@ sed -e "s/##IMAGE_REPOSITORY##/$IMAGE_REPOSITORY/g" \
 echo "$environment_stage:" >> "$temp_file"
 
 echo "  secrets:" >> "$temp_file"
-secrets=$(echo "$custom_project_variables" | jq -r --arg env "$environment_stage" '.[$env].secrets')
+secrets=$(echo "$CUSTOM_PROJECT_VARIABLES" | jq -r --arg env "$environment_stage" '.[$env].secrets')
 # Iterate over each key-value pair in dev secrets and print
 echo "$secrets" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS="=" read -r key value; do
     echo "    $key: $value" >> "$temp_file"
@@ -138,7 +165,7 @@ done
 
 ###### ADDING CONFIGMAPS ##########
 echo "  env:" >> "$temp_file"
-envs=$(echo "$custom_project_variables" | jq -r --arg env "$environment_stage" '.[$env].envs')
+envs=$(echo "$CUSTOM_PROJECT_VARIABLES" | jq -r --arg env "$environment_stage" '.[$env].envs')
 # Iterate over each key-value pair in dev secrets and print
 echo "$envs" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS="=" read -r key value; do
     echo "    $key: $value" >> "$temp_file"
@@ -147,21 +174,30 @@ done
 
 mv "$temp_file" "$values_yaml_file"
 
-echo "values.yaml after adjustments"
+print_color "32;1" "values.yaml after adjustments"
+
 cat $values_yaml_file
 
 helm template ${helm_template_folder}
 # Package Helm chart
+print_color "32;1" "Doing helm package"
 helm package ${helm_template_folder}
+
+local helm_chart_name="${APPLICATION_NAME}-${BUILD_VERSION}.tgz"
+local helm_chart_location="$(pwd)/${helm_chart_name}"
+local helm_chart="${output_folder}/${helm_chart_name}"
+
+mv "${helm_chart_location}" "${output_folder}/"
+print_color "32;1" "Helm Chart Location: ${helm_chart}"
+
 
 # Save Helm chart to OCI registry (README [Use OCI-based registries]: https://helm.sh/docs/topics/registries/)
 #https://github.com/argoproj/argo-cd/issues/12634  ( there is a bug in listing - which will be resolved soon )
 echo "Helm chart has been packaged and now trying to push to ACR. ($HELM_OCI_URL)"
-#helm push $HELM_CHART $helm_oci_url
+#helm push $helm_chart $helm_oci_url
 
-if helm push $HELM_CHART $HELM_OCI_URL; then
+if helm push $helm_chart $HELM_OCI_URL; then
     echo "Helm template has been built and pushed to ACR successfully."
-    rm -rf $HELM_CHART
 else
     echo "Error: Helm push failed. Terminating further process."
     exit 1
