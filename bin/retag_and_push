@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# MANDATORY
+#export IMAGE_PULL_TAG="${IMAGE_PULL_TAG}"
+#export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"
+
+# Assuming retag_and_push.sh is in the same directory
+${SCRIPTS_PATH}/docker/retag_and_push.sh
