@@ -35,7 +35,7 @@ echo "Copying ${helm_reference_template_folder} to ${helm_template_folder}"
 
 rm -rf "${helm_template_folder}"
 mkdir -p "${helm_template_folder}"
-cp -r ${helm_reference_template_folder} ${helm_template_folder}
+cp -r ${helm_reference_template_folder}/* ${helm_template_folder}
 
 #-----------------------ENV_VARIABLES------------------------
 
