@@ -183,7 +183,7 @@ helm template ${helm_template_folder}
 print_color "32;1" "Doing helm package"
 helm package ${helm_template_folder}
 
-helm_chart_name="${APPLICATION_NAME}-${BUILD_VERSION}.tgz"
+helm_chart_name="${APPLICATION_NAME}-${chart_version}.tgz"
 helm_chart_location="$(pwd)/${helm_chart_name}"
 helm_chart="${output_folder}/${helm_chart_name}"
 
