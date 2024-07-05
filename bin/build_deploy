@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# MANDATORY
-#export DOCKER_FILE_PATH="${DOCKER_FILE_PATH:-.}"
-#export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"
+#${SCRIPTS_PATH}/docker/docker_build_push.sh
 
-# Assuming build_and_push.sh is in the same directory
-${SCRIPTS_PATH}/docker/docker_build_push.sh
+${SCRIPTS_PATH}/helm/helm_build_push.sh
