@@ -57,4 +57,4 @@ export SOURCE_BRANCH="${SOURCE_BRANCH:-$(get_git_branch_name)}"
 # Helm details
 export HELM_CHART="${resource_path}/${APPLICATION_NAME}-${BUILD_VERSION}.tgz"
 
-export HELM_OCI_URL="${HELM_OCI_URL:-oci://\$DOCKER_IMAGE_PUSH_PREFIX/helm/}"
+export HELM_OCI_URL="${HELM_OCI_URL:-oci://\${DOCKER_IMAGE_PUSH_PREFIX}/${APPLICATION_NAME}:/${BUILD_VERSION}}"

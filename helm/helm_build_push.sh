@@ -28,12 +28,12 @@ mkdir -p "${trivy_folder_path}"
 
 # dos2unix deploy.sh
 
-echo "Creating cicd_resources_path folder"
-
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
 helm_reference_template_folder="${SCRIPTS_PATH}/helm/helm-reference-template"
 helm_template_folder="${SCRIPTS_PATH}/outputs/helm-template"
+
+echo "Copying $helm_reference_template_folder to $helm_template_folder"
 
 rm -rf "$helm_template_folder"
 cp -r $helm_reference_template_folder $helm_template_folder
@@ -152,8 +152,9 @@ mv "$temp_file" "$values_yaml_file"
 echo "values.yaml after adjustments"
 cat $values_yaml_file
 
+helm template ${helm_template_folder}
 # Package Helm chart
-helm package ./cicd-resources/helm-template/
+helm package ${helm_template_folder}
 
 # Save Helm chart to OCI registry (README [Use OCI-based registries]: https://helm.sh/docs/topics/registries/)
 #https://github.com/argoproj/argo-cd/issues/12634  ( there is a bug in listing - which will be resolved soon )
