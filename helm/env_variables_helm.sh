@@ -57,4 +57,5 @@ export SOURCE_BRANCH="${SOURCE_BRANCH:-$(get_git_branch_name)}"
 
 
 # Helm details
+export HELM_EXPERIMENTAL_OCI=1
 export HELM_OCI_URL="${HELM_OCI_URL:-oci://${DOCKER_IMAGE_PUSH_PREFIX}}"
