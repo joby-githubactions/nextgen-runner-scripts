@@ -97,7 +97,8 @@ validate_variable "SOURCE_BRANCH"
 validate_variable "HELM_OCI_URL"
 
 #This will be used for custom properties for different enviornments on the deployment side
-environment_stage=$SOURCE_BRANCH
+environment_stage="${SOURCE_BRANCH}"
+chart_version="helm-${BUILD_VERSION}"
 
 print_color "32;1" "Building Helm Template: ${helm_template_folder}"
 
@@ -122,7 +123,7 @@ sed -e "s|##APPLICATION_NAME##|${APPLICATION_NAME}|g" \
     -e "s|##BUILD_VERSION##|${BUILD_VERSION}|g" \
     -e "s|##MAINTAINER_NAME##|${GIT_COMMITTER_NAME}|g" \
     -e "s|##MAINTAINER_EMAIL##|${GIT_COMMITTER_EMAIL}|g" \
-    -e "s|##CHART_VERSION##|${BUILD_VERSION}|g" \
+    -e "s|##CHART_VERSION##|${chart_version}|g" \
     "$chart_yaml_file" > "$temp_chart_file"
 mv "$temp_chart_file" "$chart_yaml_file"
 
