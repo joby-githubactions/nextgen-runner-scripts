@@ -94,7 +94,6 @@ validate_variable "GIT_COMMITTER_EMAIL"
 validate_variable "GIT_COMMIT_URL"
 validate_variable "GIT_COMMIT_MESSAGE"
 validate_variable "SOURCE_BRANCH"
-validate_variable "HELM_CHART"
 validate_variable "HELM_OCI_URL"
 
 #This will be used for custom properties for different enviornments on the deployment side
