@@ -6,7 +6,7 @@
 source ${SCRIPTS_PATH}/shared/git_helpers.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
-export BUILD_VERSION="${GITHUB_RUN_ID}"
+export BUILD_VERSION="${GITHUB_RUN_NUMBER}"
 #to run git commands
 export GIT_DIR="${GITHUB_WORKSPACE}/.git"
 # -----------------------MANDATORY VARIABLES-----------------------
