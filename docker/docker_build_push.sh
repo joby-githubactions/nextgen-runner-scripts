@@ -26,6 +26,7 @@ push_image_latest="$DOCKER_IMAGE_PUSH_PREFIX/$APPLICATION_NAME:$IMAGE_LATEST_TAG
 # Use the environment variable in your script     # Set the Dockerfile path and tag for the Docker build
 echo "Build Repository Local Path: $DOCKER_FILE_PATH"
 docker_file="$DOCKER_FILE_PATH/Dockerfile"
+print_color "32;1" "Building Docker Image: ${push_image}"
 docker build -f "$docker_file" -t "$push_image" "$DOCKER_FILE_PATH"
 # Check the exit status of the docker build command
 
@@ -38,6 +39,7 @@ run_trivy_scan "$push_image"
 print_color "32;1" "Pushing Docker Image: $push_image"
 docker push $push_image
 
+print_color "32;1" "Retaging Docker Image: ${push_image} => ${push_image_latest}"
 docker tag "$push_image" "$push_image_latest"
 print_color "32;1" "Pushing Docker Image: $push_image_latest"
 docker push $push_image_latest
