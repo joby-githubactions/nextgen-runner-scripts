@@ -32,11 +32,11 @@ echo "Creating cicd_resources_path folder"
 
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
-templatefolder="${SCRIPTS_PATH}/helm/helm-template_raw"
-chartfolder="${SCRIPTS_PATH}/outputs/helm-template"
+helm_reference_template_folder="${SCRIPTS_PATH}/helm/helm-reference-template"
+helm_template_folder="${SCRIPTS_PATH}/outputs/helm-template"
 
-rm -rf "$chartfolder"
-cp -r $templatefolder $chartfolder
+rm -rf "$helm_template_folder"
+cp -r $helm_reference_template_folder $helm_template_folder
 
 #-----------------------ENV_VARIABLES------------------------
 
@@ -80,7 +80,7 @@ environment_stage=$SOURCE_BRANCH
 ###### HELM Chart ADJUSTMENTS ##########
 #-----_helpers.tpl-------#
 echo "Adjusting helpers.tpl"
-_helpers_file=$chartfolder/templates/_helpers.tpl
+_helpers_file=$helm_template_folder/templates/_helpers.tpl
 temp_helpers_file=$(mktemp /tmp/_helpers_file.tpl.XXXXXX)
 
 sed -e "s/##ENVIORNMENT_STAGE##/$environment_stage/g" \
@@ -90,7 +90,7 @@ mv "$temp_helpers_file" "$_helpers_file"
 
 #-----Chart.yaml-------#
 echo "Adjusting Chart.yaml"
-chart_yaml_file=$chartfolder/Chart.yaml
+chart_yaml_file=$helm_template_folder/Chart.yaml
 temp_chart_file=$(mktemp /tmp/Chart.yaml.XXXXXX)
 
 # Use sed to replace variables in the values file
@@ -105,7 +105,7 @@ mv "$temp_chart_file" "$chart_yaml_file"
 #-----values.yaml-------#
 echo "Adjusting values.yaml"
 # Set the path to your YAML file
-values_yaml_file=$chartfolder/values.yaml
+values_yaml_file=$helm_template_folder/values.yaml
 temp_file=$(mktemp /tmp/application.yaml.XXXXXX)
 
 # Set default values or use actual values
