@@ -5,4 +5,4 @@
 #export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"
 
 # Assuming build_and_push.sh is in the same directory
-${SCRIPTS_PATH}/docker/build_and_push.sh
+${SCRIPTS_PATH}/docker/docker_build_push.sh

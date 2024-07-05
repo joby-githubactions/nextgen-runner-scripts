@@ -5,4 +5,4 @@
 #export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"
 
 # Assuming retag_and_push.sh is in the same directory
-${SCRIPTS_PATH}/docker/retag_and_push.sh
+${SCRIPTS_PATH}/docker/docker_retag_and_push.sh
