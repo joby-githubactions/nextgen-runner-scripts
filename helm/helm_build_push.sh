@@ -98,7 +98,7 @@ validate_variable "HELM_OCI_URL"
 
 #This will be used for custom properties for different enviornments on the deployment side
 environment_stage="${SOURCE_BRANCH}"
-chart_version="${BUILD_VERSION}.0.0"
+chart_version="${BUILD_VERSION}-helm"
 
 print_color "32;1" "Building Helm Template: ${helm_template_folder}"
 
