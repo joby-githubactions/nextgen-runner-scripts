@@ -6,7 +6,7 @@ source "${SCRIPTS_PATH}/shared/utils.sh"
 
 # Function to run Trivy vulnerability scan on a Docker image
 function run_trivy_scan() {
-    trivy_folder_path="${SCRIPTS_PATH}/trivy/"
+    trivy_folder_path="${SCRIPTS_PATH}/outputs/trivy/"
     
     # Create or clean up Trivy results directory
     rm -rf "${trivy_folder_path}"

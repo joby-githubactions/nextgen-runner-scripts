@@ -7,6 +7,10 @@ source ${SCRIPTS_PATH}/helm/env_variables_helm.sh
 
 # Source the shared scripts
 source ${SCRIPTS_PATH}/shared/validate_variables.sh
+
+helm_template_output="${SCRIPTS_PATH}/outputs/helm-template/"
+rm -rf "${trivy_folder_path}"
+mkdir -p "${trivy_folder_path}"
 #-----------------------Expected Variables------------------------
 #BUILD_SOURCEBRANCH='development'
 #BUILD_BUILDNUMBER='20231205.7'
@@ -28,13 +32,11 @@ echo "Creating cicd_resources_path folder"
 
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
-template_folder="${SCRIPTS_PATH}/helm/cicd-resources-template"
-cicd_resources_path="${SCRIPTS_PATH}/helm/cicd-resources"
+templatefolder="${SCRIPTS_PATH}/helm/helm-template_raw"
+chartfolder="${SCRIPTS_PATH}/outputs/helm-template"
 
-rm -rf "$cicd_resources_path"
-cp -r $template_folder $cicd_resources_path
-
-chartfolder=$cicd_resources_path"/helm-template"
+rm -rf "$chartfolder"
+cp -r $templatefolder $chartfolder
 
 #-----------------------ENV_VARIABLES------------------------
 
