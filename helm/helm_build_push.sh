@@ -31,10 +31,11 @@ source ${SCRIPTS_PATH}/shared/validate_variables.sh
 helm_reference_template_folder="${SCRIPTS_PATH}/helm/helm-reference-template"
 helm_template_folder="${SCRIPTS_PATH}/outputs/helm-template"
 
-echo "Copying $helm_reference_template_folder to $helm_template_folder"
+echo "Copying ${helm_reference_template_folder} to ${helm_template_folder}"
 
-rm -rf "$helm_template_folder"
-cp -r $helm_reference_template_folder $helm_template_folder
+rm -rf "${helm_template_folder}"
+mkdir -p "${helm_template_folder}"
+cp -r ${helm_reference_template_folder} ${helm_template_folder}
 
 #-----------------------ENV_VARIABLES------------------------
 
