@@ -174,30 +174,32 @@ done
 
 mv "$temp_file" "$values_yaml_file"
 
-print_color "32;1" "values.yaml after adjustments"
+print_color "32;1" "Deployment vaiables"
 
 cat $values_yaml_file
 
 helm template ${helm_template_folder}
-# Package Helm chart
-print_color "32;1" "Doing helm package"
-helm package ${helm_template_folder}
 
+# Package Helm chart
 helm_chart_name="${APPLICATION_NAME}-${chart_version}.tgz"
 helm_chart_location="$(pwd)/${helm_chart_name}"
 helm_chart="${output_folder}/${helm_chart_name}"
 
+print_color "32;1" "Packaging helm template: ${helm_chart_name}"
+helm package ${helm_template_folder}
+
+
 mv "${helm_chart_location}" "${output_folder}/"
-print_color "32;1" "Helm Chart Location: ${helm_chart}"
+print_color "32;1" "Auto Generated Helm Chart Location: ${helm_chart}"
 
 
 # Save Helm chart to OCI registry (README [Use OCI-based registries]: https://helm.sh/docs/topics/registries/)
 #https://github.com/argoproj/argo-cd/issues/12634  ( there is a bug in listing - which will be resolved soon )
-echo "Helm chart has been packaged and now trying to push to ACR. ($HELM_OCI_URL)"
+print_color "32;1"  "Pushing Helm chart to $HELM_OCI_URL"
 #helm push $helm_chart $helm_oci_url
 
 if helm push $helm_chart $HELM_OCI_URL; then
-    echo "Helm template has been built and pushed to ACR successfully."
+    print_color "32;1"  "Helm template has been built and pushed to the registry."
 else
     echo "Error: Helm push failed. Terminating further process."
     exit 1
