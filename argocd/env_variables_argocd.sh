@@ -9,6 +9,7 @@ source ${SCRIPTS_PATH}/shared/git_helpers.sh
 export BUILD_VERSION="${GITHUB_RUN_NUMBER}"
 #to run git commands
 export GIT_DIR="${GITHUB_WORKSPACE}/.git"
+export PIPELINE_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 # -----------------------MANDATORY VARIABLES-----------------------
 export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"  ##DOCKER_HOST
 export NAMESPACE="${NAMESPACE}"
@@ -20,5 +21,6 @@ export GIT_COMMITTER_NAME="${GIT_COMMITTER_NAME:-$(get_git_committer_name)}"
 export GIT_COMMITTER_EMAIL="${GIT_COMMITTER_EMAIL:-$(get_git_committer_email)}"
 export GIT_COMMIT_URL="${GIT_COMMIT_URL:-$(get_git_commit_url)}"
 export GIT_COMMIT_MESSAGE="${GIT_COMMIT_MESSAGE:-$(get_git_commit_message)}"
-export GIT_COMMIT_ID="${GIT_COMMIT_ID:-$(get_git_commit_message)}"
 export SOURCE_BRANCH="${SOURCE_BRANCH:-$(get_git_branch_name)}"
+export GIT_COMMIT_ID="${GIT_COMMIT_ID:-$(get_git_commit_id)}"
+export GIT_COMMIT_SHORT_ID="${GIT_COMMIT_SHORT_ID:-$(get_git_commit_short_id)}"

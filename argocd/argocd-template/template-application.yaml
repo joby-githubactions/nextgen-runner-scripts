@@ -1,20 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ##APPLICATION_NAME##
+  name: "##APPLICATION_NAME##"
   namespace: argocd
   annotations:
-    maintainer-name: "##MAINTAINER_NAME##"
-    maintainer-email: "##MAINTAINER_EMAIL##"
-    git-commit-url: "##GIT_COMMIT_URL##"
-    git-commit-message: "##GIT_COMMIT_MESSAGE##"
+    maintainer-name: ##MAINTAINER_NAME##
+    maintainer-email: ##MAINTAINER_EMAIL##
+    git-commit-url: ##GIT_COMMIT_URL##
+    git-commit-id: ##GIT_COMMIT_ID##"
+    git-commit-short-id: ##GIT_COMMIT_SHORT_ID##
+    pipeline-url: ##PIPELINE_URL##
+    pipeline-id: ##BUILD_VERSION##
 spec:
-  project: default
+  project: ##NAMESPACE##
   revisionHistoryLimit: 5  
   source:
     repoURL: "##REPO_URL##"
-    targetRevision: "##BUILD_VERSION##"
-    chart: helm/##APPLICATION_NAME##
+    targetRevision: "##BUILD_VERSION##-helm"
+    chart: "##APPLICATION_NAME##"
   destination:
     server: https://kubernetes.default.svc
     namespace: ##NAMESPACE##
@@ -35,19 +38,23 @@ spec:
         duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
         factor: 2 # a factor to multiply the base duration after each failed retry
         maxDuration: 3m # the maximum amount of time allowed for the backoff strategy       
-  # Extra information to show in the Argo CD Application details tab
+  # Extra information to show in the Argo CD Application details tab     
   info:
     - name: 'Git Branch:'
-      value: '##SOURCE_BRANCH##'   
+      value: ##SOURCE_BRANCH## 
     - name: 'Git Commit URL:'
-      value: '##GIT_COMMIT_URL##'   
+      value: ##GIT_COMMIT_URL##  
     - name: 'Git Commit Message:'
-      value: '##GIT_COMMIT_MESSAGE##' 
-    - name: 'Maintainer Name :'
-      value: '##MAINTAINER_NAME##'        
+      value: ##GIT_COMMIT_MESSAGE##
+    - name: 'Maintainer Name:'
+      value: ##MAINTAINER_NAME##       
     - name: 'Maintainer Email:'
-      value: '##MAINTAINER_EMAIL##'        
-    - name: 'Build Version:'
-      value: '##BUILD_VERSION##' 
-    - name: 'Git Commit Id:'
-      value: '##GIT_COMMIT_ID##' 
+      value: ##MAINTAINER_EMAIL##     
+    - name: 'Full Git Commit ID:'
+      value: ##GIT_COMMIT_ID##
+    - name: 'Short Git Commit ID:'
+      value: ##GIT_COMMIT_SHORT_ID## 
+    - name: 'Pipeline URL:'
+      value: ##PIPELINE_URL##
+    - name: 'Pipeline ID:'
+      value: ##BUILD_VERSION##       

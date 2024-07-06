@@ -18,10 +18,12 @@ validate_variable "NAMESPACE"
 validate_variable "APPLICATION_NAME"
 validate_variable "GIT_COMMITTER_NAME"
 validate_variable "GIT_COMMITTER_EMAIL"
-validate_variable "GIT_COMMIT_URL"
 validate_variable "GIT_COMMIT_MESSAGE"
-validate_variable "GIT_COMMIT_ID"
 validate_variable "SOURCE_BRANCH"
+validate_variable "GIT_COMMIT_ID"
+validate_variable "GIT_COMMIT_SHORT_ID"
+validate_variable "PIPELINE_URL"
+validate_variable "GIT_COMMIT_URL"
 #----------------------EO-EXPECTED VARIABLES----------------------
 
 ###### ARGOCD ADJUSTMENTS ##########
@@ -41,6 +43,8 @@ sed \
     -e "s|##REPO_URL##|${DOCKER_IMAGE_PUSH_PREFIX}|g" \
     -e "s|##SOURCE_BRANCH##|${SOURCE_BRANCH}|g" \
     -e "s|##GIT_COMMIT_ID##|${GIT_COMMIT_ID}|g" \
+    -e "s|##GIT_COMMIT_SHORT_ID##|${GIT_COMMIT_SHORT_ID}|g" \
+    -e "s|##PIPELINE_URL##|${PIPELINE_URL}|g" \
     "${application_yaml_template}" > "$temp_file"
 # Move the temporary file back to the original file
 mv "$temp_file" "$argocd_template"

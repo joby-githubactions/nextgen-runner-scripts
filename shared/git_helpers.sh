@@ -46,6 +46,11 @@ function get_git_commit_id(){
     git rev-parse HEAD
 }
 
+# Function to get the short version of the current Git commit ID (short hash)
+function get_git_commit_short_id(){
+    git rev-parse --short HEAD
+}
+
 # Function to get the Git commit message
 function get_git_commit_message(){
     local git_commit_message=$(git log -1 --pretty=%B)
