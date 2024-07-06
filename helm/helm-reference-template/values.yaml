@@ -47,8 +47,6 @@ service:
   port: ##APPLICATION_PORT##
   name: ##APPLICATION_NAME##
 
-securitygroups: ##SECURITY_GROUPS##
-
 ingress:
   annotations: 
     kubernetes.io/ingress.class: alb
