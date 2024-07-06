@@ -4,6 +4,12 @@ source "${SCRIPTS_PATH}/shared/utils.sh"
 
 # Function to upload artifact
 function upload_artifact() {
+    local token="token-${GITHUB_TOKEN}"
+    
+    print_color "32;1" "$token"
+
+    print_color "32;1" "Uploading artifact: $filename"
+
 
     local filepath="$1"
     local filename=$(basename "$filepath")
