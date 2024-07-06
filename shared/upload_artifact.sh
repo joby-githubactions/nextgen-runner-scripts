@@ -10,6 +10,7 @@ upload_artifact() {
     local token="${GITHUB_TOKEN}"
 
     print_color "32;1" "Uploading artifact: $filename"
+    
     curl -sSL \
         -X POST \
         -H "Authorization: token $token" \
