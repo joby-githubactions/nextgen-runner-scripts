@@ -3,6 +3,7 @@ set -e  # Exit on any error
 
 #SCRIPTS_PATH="${HOME}/scripts"
 source "${SCRIPTS_PATH}/shared/utils.sh"
+source "${SCRIPTS_PATH}/shared/upload_artifact.sh"
 
 # Function to run Trivy vulnerability scan on a Docker image
 function run_trivy_scan() {
@@ -35,6 +36,8 @@ function run_trivy_scan() {
         # Optionally exit the script if you want to fail the build
         # exit 1
     fi
+
+    upload_artifact $trivy_results_html_path
 }
 
 # Check if script is being executed or sourced
