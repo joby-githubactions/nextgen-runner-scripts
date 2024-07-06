@@ -53,7 +53,7 @@ source ${SCRIPTS_PATH}/shared/utils.sh
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
 helm_reference_template_folder="${SCRIPTS_PATH}/helm/helm-reference-template"
-output_folder="${SCRIPTS_PATH}/outputs"
+output_folder="${ARTIFACTS_PATH}"
 helm_template_folder="${output_folder}/helm-template"
 
 echo "Copying ${helm_reference_template_folder} to ${helm_template_folder}"
