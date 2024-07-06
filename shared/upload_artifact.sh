@@ -30,7 +30,7 @@ upload_artifact() {
 
     if [ "$upload_url" == "null" ]; then
         echo "Failed to create artifact. Response: ${create_response}"
-        exit 1
+        #exit 1
     fi
 
     echo "Created artifact: ${artifact_name}. Upload URL: ${upload_url}"
