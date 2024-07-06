@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "${SCRIPTS_PATH}/shared/utils.sh"
+
 # Function to upload artifact
 upload_artifact() {
     local filepath="$1"
@@ -7,7 +9,7 @@ upload_artifact() {
     local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts"
     local token="${GITHUB_TOKEN}"
 
-    echo "Uploading artifact: $filename"
+    print_color "32;1" "Uploading artifact: $filename"
     curl -sSL \
         -X POST \
         -H "Authorization: token $token" \
