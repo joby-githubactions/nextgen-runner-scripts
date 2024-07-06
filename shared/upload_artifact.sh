@@ -7,7 +7,7 @@ function upload_artifact() {
     print_color "32;1" "Uploading artifact: $filename"
     local filepath="$1"
     local filename=$(basename "$filepath")
-    local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts
+    local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts"
     local token="${GITHUB_TOKEN}"
     print_color "32;1" "File Path: $filepath"
     print_color "32;1" "File Name: $filename"
