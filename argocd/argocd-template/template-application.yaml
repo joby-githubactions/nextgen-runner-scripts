@@ -56,5 +56,5 @@ spec:
       value: ##GIT_COMMIT_SHORT_ID## 
     - name: 'Pipeline URL:'
       value: ##PIPELINE_URL##
-    - name: 'Pipeline ID:'
+    - name: 'Build Version:'
       value: ##BUILD_VERSION##       
