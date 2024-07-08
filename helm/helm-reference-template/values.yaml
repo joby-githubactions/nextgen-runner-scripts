@@ -49,10 +49,9 @@ service:
 
 ingress:
   annotations: 
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/healthcheck-path: ##APPLICATION_HEALTH_READINESS_PATH##
-    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '10'
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts: []
 
 resources:
    requests:

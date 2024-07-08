@@ -7,9 +7,9 @@
   {{- $fullName = .Values.service.name -}}
 {{ end}}
 
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 {{- else -}}
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1
 {{- end }}
 kind: Ingress
 metadata:
@@ -39,14 +39,18 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: ssl-redirect
-              servicePort: use-annotation  
+              service:
+                name: ssl-redirect
+                port: use-annotation  
     - host: {{ . | quote }}
       http:
         paths:
           - path: /*
+            pathType: Prefix
             backend:           
-              serviceName: {{  $fullName }}
-              servicePort: {{ $svcPort }}
+              service:
+                name: {{  $fullName }}
+                port: {{ $svcPort }}
     {{- end }}
   {{- end }}
+  

@@ -150,6 +150,7 @@ sed -e "s/##IMAGE_REPOSITORY##/$IMAGE_REPOSITORY/g" \
     -e "s/##RESOURCE_LIMITS_CPU##/$RESOURCE_LIMITS_CPU/g" \
     -e "s/##RESOURCE_LIMITS_MEMORY##/$RESOURCE_LIMITS_MEMORY/g" \
     -e "s/##AUTOSCALING_ENABLED##/$AUTOSCALING_ENABLED/g" \
+    -e "s/##INGRESS_HOST##/$INGRESS_HOST/g" \
         "$values_yaml_file" > "$temp_file"
 
 ###### ADDING SECRETS ##########
