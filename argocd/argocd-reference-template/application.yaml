@@ -12,7 +12,7 @@ metadata:
     pipeline-url: "##PIPELINE_URL##"
     pipeline-id: "##BUILD_VERSION##"
 spec:
-  project: ##NAMESPACE##
+  project: default
   revisionHistoryLimit: 5  
   source:
     repoURL: "##REPO_URL##"
