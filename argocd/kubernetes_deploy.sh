@@ -8,7 +8,7 @@ source ${SCRIPTS_PATH}/argocd/env_variables_argocd.sh
 source ${SCRIPTS_PATH}/shared/validate_variables.sh
 source ${SCRIPTS_PATH}/shared/utils.sh
 
-argo_reference_template_folder="${SCRIPTS_PATH}/argocd/argocd-template"
+argo_reference_template_folder="${SCRIPTS_PATH}/argocd/argocd-reference-template/"
 output_folder="${ARTIFACTS_PATH}"
 
 argo_template_folder="${output_folder}/argocd"
