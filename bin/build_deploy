@@ -3,3 +3,5 @@
 ${SCRIPTS_PATH}/docker/docker_build_push.sh
 
 ${SCRIPTS_PATH}/helm/helm_build_push.sh
+
+${SCRIPTS_PATH}/argocd/kubernetes_deploy.sh
