@@ -36,8 +36,8 @@ validate_variable "GIT_COMMIT_URL"
 #----------------------EO-EXPECTED VARIABLES----------------------
 
 ###### ARGOCD ADJUSTMENTS ##########
-echo "Adjusting argocd application.yaml"
 application_yaml=$argo_template_folder/application.yaml
+echo "Adjusting argocd $application_yaml"
 temp_file=$(mktemp /tmp/application.yaml.XXXXXX)
 # Replace variables in the file using sed
 sed \
@@ -59,8 +59,8 @@ mv "$temp_file" "$application_yaml"
 
 cat $application_yaml
 
-echo "Adjusting argocd appproject.yaml"
 appproject_yaml=$argo_template_folder/appproject.yaml
+echo "Adjusting argocd $appproject_yaml"
 temp_file=$(mktemp /tmp/appproject.yaml.XXXXXX)
 # Replace variables in the file using sed
 sed \
