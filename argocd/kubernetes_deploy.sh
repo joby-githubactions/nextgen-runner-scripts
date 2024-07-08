@@ -8,7 +8,16 @@ source ${SCRIPTS_PATH}/argocd/env_variables_argocd.sh
 source ${SCRIPTS_PATH}/shared/validate_variables.sh
 source ${SCRIPTS_PATH}/shared/utils.sh
 
-argofolder="${SCRIPTS_PATH}/argocd/argocd-template"
+argo_reference_template_folder="${SCRIPTS_PATH}/argocd/argocd-template"
+output_folder="${ARTIFACTS_PATH}"
+
+argo_template_folder="${output_folder}/argocd"
+
+echo "Copying ${argo_reference_template_folder} to ${argo_template_folder}"
+
+rm -rf "${argo_template_folder}"
+mkdir -p "${argo_template_folder}"
+cp -r ${argo_reference_template_folder}/* ${argo_template_folder}
 
 # Validate mandatory variables
 #------------------------EXPECTED VARIABLES-----------------------
@@ -28,8 +37,7 @@ validate_variable "GIT_COMMIT_URL"
 
 ###### ARGOCD ADJUSTMENTS ##########
 echo "Adjusting argocd application.yaml"
-application_yaml_template=$argofolder/template-application.yaml
-argocd_template=$argofolder/application.yaml
+application_yaml=$argo_template_folder/application.yaml
 temp_file=$(mktemp /tmp/application.yaml.XXXXXX)
 # Replace variables in the file using sed
 sed \
@@ -45,12 +53,23 @@ sed \
     -e "s|##GIT_COMMIT_ID##|${GIT_COMMIT_ID}|g" \
     -e "s|##GIT_COMMIT_SHORT_ID##|${GIT_COMMIT_SHORT_ID}|g" \
     -e "s|##PIPELINE_URL##|${PIPELINE_URL}|g" \
-    "${application_yaml_template}" > "$temp_file"
+    "${argocd_template}" > "$temp_file"
 # Move the temporary file back to the original file
-mv "$temp_file" "$argocd_template"
+mv "$temp_file" "$application_yaml"
 
-cat $argocd_template
+cat $application_yaml
+
+echo "Adjusting argocd appproject.yaml"
+appproject_yaml=$argo_template_folder/appproject.yaml
+temp_file=$(mktemp /tmp/appproject.yaml.XXXXXX)
+# Replace variables in the file using sed
+sed \
+    -e "s|##NAMESPACE##|${NAMESPACE}|g" \
+    "${appproject_yaml}" > "$temp_file"
+# Move the temporary file back to the original file
+mv "$temp_file" "$appproject_yaml"
+
 
 print_color "32;1"  "Applying ArgoCD template"
 
-kubectl apply -f $argocd_template
+kubectl apply -f $argo_template_folder

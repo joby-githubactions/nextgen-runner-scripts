@@ -1,0 +1,7 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: ##NAMESPACE##
+  namespace: argocd
+spec:
+  description: "##NAMESPACE## is autocreated by nextgen-runner to group all the projects inside the same namespace"
