@@ -59,17 +59,6 @@ mv "$temp_file" "$application_yaml"
 
 cat $application_yaml
 
-appproject_yaml=$argo_template_folder/appproject.yaml
-echo "Adjusting argocd $appproject_yaml"
-temp_file=$(mktemp /tmp/appproject.yaml.XXXXXX)
-# Replace variables in the file using sed
-sed \
-    -e "s|##NAMESPACE##|${NAMESPACE}|g" \
-    "${appproject_yaml}" > "$temp_file"
-# Move the temporary file back to the original file
-mv "$temp_file" "$appproject_yaml"
-
-
 print_color "32;1"  "Applying ArgoCD template"
 
 kubectl apply -f $argo_template_folder
