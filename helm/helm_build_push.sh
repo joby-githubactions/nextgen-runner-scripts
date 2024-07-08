@@ -166,13 +166,13 @@ if [ -n "$IMAGE_PULL_SECRET" ]; then
   echo "IMAGE_PULL_SECRET is set to $IMAGE_PULL_SECRET"
 
   # Replace empty imagePullSecrets array with the IMAGE_PULL_SECRET value
-  sed -i "" "s/imagePullSecrets: \[\]/imagePullSecrets:\n  - $IMAGE_PULL_SECRET/" "$VALUES_FILE"
-  echo "Added $IMAGE_PULL_SECRET to imagePullSecrets in $VALUES_FILE"
+  sed -i "" "s/imagePullSecrets: \[\]/imagePullSecrets:\n  - $IMAGE_PULL_SECRET/" "$temp_file"
+  echo "Added $IMAGE_PULL_SECRET to imagePullSecrets in $temp_file"
 else
-  echo "IMAGE_PULL_SECRET is not set. Removing imagePullSecrets from $VALUES_FILE."
+  echo "IMAGE_PULL_SECRET is not set. Removing imagePullSecrets from $temp_file."
   
   # Remove the entire line containing imagePullSecrets: [] from values.yaml
-  sed -i "" "/imagePullSecrets: \[\]/d" "$VALUES_FILE"
+  sed -i "" "/imagePullSecrets: \[\]/d" "$temp_file"
 fi
 
 ###### ADDING SECRETS ##########
