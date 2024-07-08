@@ -15,8 +15,8 @@ healthCheck:
     path: ##APPLICATION_HEALTH_READINESS_PATH##
     delay: ##APPLICATION_HEALTH_READINESS_DELAY##
 
-imagePullSecrets: 
-  - name: ##IMAGE_PULL_SECRETS##
+imagePullSecrets: []
+
 fullnameOverride: ""
 
 serviceAccount:

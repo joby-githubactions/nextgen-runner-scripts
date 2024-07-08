@@ -153,6 +153,28 @@ sed -e "s/##IMAGE_REPOSITORY##/$IMAGE_REPOSITORY/g" \
     -e "s/##INGRESS_HOST##/$INGRESS_HOST/g" \
         "$values_yaml_file" > "$temp_file"
 
+# Check if the INGRESS_HOST variable is set
+if [ -n "$INGRESS_HOST" ]; then
+  echo "INGRESS_HOST is set to $INGRESS_HOST"
+  # Replace the empty hosts array with the INGRESS_HOST value
+  sed -i "" "s/hosts: \[\]/hosts:\n    - \"$INGRESS_HOST\"/" "$temp_file"
+  echo "Added $INGRESS_HOST to ingress.hosts in $temp_file"
+fi
+
+# Check if the IMAGE_PULL_SECRET variable is set
+if [ -n "$IMAGE_PULL_SECRET" ]; then
+  echo "IMAGE_PULL_SECRET is set to $IMAGE_PULL_SECRET"
+
+  # Replace empty imagePullSecrets array with the IMAGE_PULL_SECRET value
+  sed -i "" "s/imagePullSecrets: \[\]/imagePullSecrets:\n  - $IMAGE_PULL_SECRET/" "$VALUES_FILE"
+  echo "Added $IMAGE_PULL_SECRET to imagePullSecrets in $VALUES_FILE"
+else
+  echo "IMAGE_PULL_SECRET is not set. Removing imagePullSecrets from $VALUES_FILE."
+  
+  # Remove the entire line containing imagePullSecrets: [] from values.yaml
+  sed -i "" "/imagePullSecrets: \[\]/d" "$VALUES_FILE"
+fi
+
 ###### ADDING SECRETS ##########
 echo "$environment_stage:" >> "$temp_file"
 
