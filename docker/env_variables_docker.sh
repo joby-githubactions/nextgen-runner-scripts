@@ -4,9 +4,10 @@
 
 # Source utils.sh for utility functions
 source ${SCRIPTS_PATH}/shared/git_helpers.sh
+source ${SCRIPTS_PATH}/customize/version.sh
 
 # -----------------------REFERANCE VARIABLES-----------------------
-export BUILD_VERSION="${GITHUB_RUN_NUMBER}"
+export BUILD_VERSION="$(get_build_version)"
 #to run git commands
 export GIT_DIR="${GITHUB_WORKSPACE}/.git"
 # -----------------------MANDATORY VARIABLES-----------------------
