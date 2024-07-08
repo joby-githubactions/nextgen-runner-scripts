@@ -53,7 +53,7 @@ sed \
     -e "s|##GIT_COMMIT_ID##|${GIT_COMMIT_ID}|g" \
     -e "s|##GIT_COMMIT_SHORT_ID##|${GIT_COMMIT_SHORT_ID}|g" \
     -e "s|##PIPELINE_URL##|${PIPELINE_URL}|g" \
-    "${argocd_template}" > "$temp_file"
+    "${application_yaml}" > "$temp_file"
 # Move the temporary file back to the original file
 mv "$temp_file" "$application_yaml"
 
