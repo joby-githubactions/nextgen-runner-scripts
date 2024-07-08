@@ -1,5 +1,7 @@
 #!/bin/bash
 
+${SCRIPTS_PATH}/customize/build_artifacts.sh
+
 ${SCRIPTS_PATH}/docker/docker_build_push.sh
 
 ${SCRIPTS_PATH}/helm/helm_build_push.sh
