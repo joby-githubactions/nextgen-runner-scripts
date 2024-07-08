@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e  # comment to avoid exit on any error
-#SCRIPTS_PATH="${HOME}/actions-runner/scripts"
 
 source ${SCRIPTS_PATH}/argocd/env_variables_argocd.sh
 
