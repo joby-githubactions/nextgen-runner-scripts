@@ -53,9 +53,14 @@ install_jdk_version() {
   validate_variable "BUILD_RESOURCES_PATH"
   validate_variable "JDK_VERSION"
 
-  local base_dir="${BUILD_RESOURCES_PATH}/jdk/${version}"
   local version="${JDK_VERSION}"
   local versions_file="${SCRIPTS_PATH}/customize/build_dependency_versions/jdk_versions.txt"
+  # If version is not provided, read the default version from the versions file
+  if [ -z "$version" ]; then
+      version=$(grep "^default=" "$versions_file" | cut -d '=' -f2)
+  fi
+
+  local base_dir="${BUILD_RESOURCES_PATH}/jdk/${version}"
 
   download_and_extract $base_dir $version $versions_file
 
@@ -69,9 +74,14 @@ install_maven_version() {
   validate_variable "BUILD_RESOURCES_PATH"
   validate_variable "MAVEN_VERSION"
 
-  local base_dir="${BUILD_RESOURCES_PATH}/maven/${version}"
   local version="${MAVEN_VERSION}"
   local versions_file="${SCRIPTS_PATH}/customize/build_dependency_versions/maven_versions.txt"
+  # If version is not provided, read the default version from the versions file
+  if [ -z "$version" ]; then
+      version=$(grep "^default=" "$versions_file" | cut -d '=' -f2)
+  fi
+  
+  local base_dir="${BUILD_RESOURCES_PATH}/maven/${version}"
 
   download_and_extract $base_dir $version $versions_file
 
