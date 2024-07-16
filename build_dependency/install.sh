@@ -55,7 +55,7 @@ install_jdk_version() {
 
   local base_dir="${BUILD_RESOURCES_PATH}/jdk/${version}"
   local version="${JDK_VERSION}"
-  local versions_file="${SCRIPTS_PATH}/customize/jdk_versions.txt"
+  local versions_file="${SCRIPTS_PATH}/customize/build_dependency_versions/jdk_versions.txt"
 
   download_and_extract $base_dir $version $versions_file
 
@@ -71,7 +71,7 @@ install_maven_version() {
 
   local base_dir="${BUILD_RESOURCES_PATH}/maven/${version}"
   local version="${MAVEN_VERSION}"
-  local versions_file="${SCRIPTS_PATH}/customize/maven_versions.txt"
+  local versions_file="${SCRIPTS_PATH}/customize/build_dependency_versions/maven_versions.txt"
 
   download_and_extract $base_dir $version $versions_file
 
