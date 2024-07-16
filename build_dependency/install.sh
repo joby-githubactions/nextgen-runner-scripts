@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source ${SCRIPTS_PATH}/shared/validate_variables.sh
-source ${SCRIPTS_PATH}/build_dependency/download_helper.sh
 
 # Function to download and unzip the specified version if not already present
 function download_and_extract() {
