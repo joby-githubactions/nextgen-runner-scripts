@@ -1,6 +1,6 @@
 #!/bin/bash
 
-${SCRIPTS_PATH}/customize/build_artifacts.sh
+${SCRIPTS_PATH}/build_dependency/build_artifacts.sh
 
 ${SCRIPTS_PATH}/docker/docker_build_push.sh
 
