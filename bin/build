@@ -2,14 +2,10 @@
 
 set -e
 
-export CICD_ACTION="build_deploy"
+export CICD_ACTION="build"
 
 ${SCRIPTS_PATH}/shared/initialize-customize.sh
 
 ${SCRIPTS_PATH}/build_dependency/build_artifacts.sh
 
 ${SCRIPTS_PATH}/docker/docker_build_push.sh
-
-${SCRIPTS_PATH}/helm/helm_build_push.sh
-
-${SCRIPTS_PATH}/argocd/kubernetes_deploy.sh

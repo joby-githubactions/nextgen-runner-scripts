@@ -49,9 +49,16 @@ service:
 
 ingress:
   annotations: 
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
-  hosts: []
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-allianz
+  hosts: ##INGRESS_HOST##
+  tls:
+    - secretName: ##APPLICATION_NAME##-tls
+      hosts:
+        - ##INGRESS_HOST##
 
 resources:
    requests:
@@ -73,6 +80,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+existingPv:
+  name: ##PERSISTENT_VOLUME_CLAIM##
 
 # Custom values will be added below from the environment variables - Keep two line spaces
 

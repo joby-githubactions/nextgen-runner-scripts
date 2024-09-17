@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+export CICD_ACTION="build_docker_images"
+
+${SCRIPTS_PATH}/shared/initialize-customize.sh
+
+${SCRIPTS_PATH}/docker/docker_build_push.sh

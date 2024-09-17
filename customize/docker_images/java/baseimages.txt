@@ -1,0 +1,8 @@
+8=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:8-jre-alpine
+11=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:11-jre-alpine
+17=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:17-jre-alpine
+18=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:18-jre-alpine
+19=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:19-jre-alpine
+20=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:20-jre-alpine
+21=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:21-jre-alpine
+22=471112628582.dkr.ecr.eu-central-1.amazonaws.com/eclipse-temurin:22-jre-alpine

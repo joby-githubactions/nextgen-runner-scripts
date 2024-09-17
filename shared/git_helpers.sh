@@ -58,6 +58,11 @@ function get_git_commit_message(){
     echo "${git_commit_message}"
 }
 
+function get_git_branch_prefix() {
+    branch=$(get_git_branch_name)
+    echo ${branch%%/*}
+}
+
 # Example usage:
 # Uncomment the below lines for testing or usage example
 # get_git_repository_name

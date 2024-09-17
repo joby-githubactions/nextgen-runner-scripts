@@ -4,11 +4,16 @@ set -e  # comment to avoid exit on any error
 source ${SCRIPTS_PATH}/argocd/env_variables_argocd.sh
 
 # Source the shared scripts
-source ${SCRIPTS_PATH}/shared/validate_variables.sh
 source ${SCRIPTS_PATH}/shared/utils.sh
+source ${SCRIPTS_PATH}/customize/auth_config.sh
+
+print_step "Kubernetes Deploy"
+
+#auth_config
+argocd_repo_create
 
 argo_reference_template_folder="${SCRIPTS_PATH}/argocd/argocd-reference-template/"
-output_folder="${ARTIFACTS_PATH}"
+output_folder="$(get_artifacts_path)"
 
 argo_template_folder="${output_folder}/argocd"
 
@@ -32,7 +37,14 @@ validate_variable "GIT_COMMIT_ID"
 validate_variable "GIT_COMMIT_SHORT_ID"
 validate_variable "PIPELINE_URL"
 validate_variable "GIT_COMMIT_URL"
+validate_variable "ARGOCD_PROJECT_NAME"
 #----------------------EO-EXPECTED VARIABLES----------------------
+
+argocd_app_name="${APPLICATION_NAME}"
+# Create the app_name variable with conditional hyphen
+if [ -n "$ARGOCD_APPLICATION_NAME" ]; then
+    argocd_app_name="${ARGOCD_APPLICATION_NAME}"
+fi
 
 ###### ARGOCD ADJUSTMENTS ##########
 application_yaml=$argo_template_folder/application.yaml
@@ -40,6 +52,8 @@ echo "Adjusting argocd $application_yaml"
 temp_file=$(mktemp /tmp/application.yaml.XXXXXX)
 # Replace variables in the file using sed
 sed \
+    -e "s|##ARGOCD_APPLICATION_NAME##|${argocd_app_name}|g" \
+    -e "s|##ARGOCD_PROJECT_NAME##|${ARGOCD_PROJECT_NAME}|g" \
     -e "s|##APPLICATION_NAME##|${APPLICATION_NAME}|g" \
     -e "s|##MAINTAINER_NAME##|${GIT_COMMITTER_NAME}|g" \
     -e "s|##MAINTAINER_EMAIL##|${GIT_COMMITTER_EMAIL}|g" \
@@ -61,3 +75,5 @@ cat $application_yaml
 print_color "32;1"  "Applying ArgoCD template"
 
 kubectl apply -f $argo_template_folder
+
+print_color "32;1" "Completed: Kubernetes Deploy"

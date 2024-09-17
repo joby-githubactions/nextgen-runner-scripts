@@ -1,12 +1,13 @@
 #!/bin/bash
 set -e  # Exit on any error
 
-#SCRIPTS_PATH="${HOME}/scripts"
 source "${SCRIPTS_PATH}/shared/utils.sh"
 
 # Function to run Trivy vulnerability scan on a Docker image
-function run_trivy_scan() {
-    trivy_folder_path="${ARTIFACTS_PATH}/trivy/"
+function run_image_scan() {
+    print_step "Running Image Vulnerability Scan"
+
+    trivy_folder_path="$(get_artifacts_path)/trivy/"
     
     # Create or clean up Trivy results directory
     rm -rf "${trivy_folder_path}"
@@ -31,10 +32,11 @@ function run_trivy_scan() {
     # Check if Trivy identified HIGH or CRITICAL vulnerabilities
     if grep -q '<failure message="' "${trivy_results_xml_path}"; then
         # Print message about vulnerabilities found
-        print_color "34;1" "Trivy found HIGH or CRITICAL vulnerabilities. Build failed."
+        print_color "34;1" "Trivy found HIGH or CRITICAL vulnerabilities."
         # Optionally exit the script if you want to fail the build
         # exit 1
     fi
+    print_color "32;1" "Completed: Image Vulnerability Scan"
 }
 
 # Check if script is being executed or sourced
@@ -44,7 +46,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
         echo "Usage: $0 <docker_image>"
         exit 1
     fi
-    run_trivy_scan "$1"
+    run_image_scan "$1"
 fi
 
 # Usage Example:

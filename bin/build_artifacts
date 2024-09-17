@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+export CICD_ACTION="build_artifacts"
+
+${SCRIPTS_PATH}/shared/initialize-customize.sh
+
+${SCRIPTS_PATH}/build_dependency/build_artifacts.sh

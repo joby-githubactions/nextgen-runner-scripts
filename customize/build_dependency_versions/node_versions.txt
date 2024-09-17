@@ -1,0 +1,12 @@
+default=22.0.0
+12.0.0=s3://nextgen-runner-resources/node/node-v12.0.0-linux-x64.tar.gz
+13.0.0=s3://nextgen-runner-resources/node/node-v13.0.0-linux-x64.tar.gz
+14.0.0=s3://nextgen-runner-resources/node/node-v14.0.0-linux-x64.tar.gz
+15.0.0=s3://nextgen-runner-resources/node/node-v15.0.0-linux-x64.tar.gz
+16.0.0=s3://nextgen-runner-resources/node/node-v16.0.0-linux-x64.tar.gz
+17.0.0=s3://nextgen-runner-resources/node/node-v17.0.0-linux-x64.tar.gz
+18.0.0=s3://nextgen-runner-resources/node/node-v18.0.0-linux-x64.tar.gz
+19.0.0=s3://nextgen-runner-resources/node/node-v19.0.0-linux-x64.tar.gz
+20.0.0=s3://nextgen-runner-resources/node/node-v20.0.0-linux-x64.tar.gz
+21.0.0=s3://nextgen-runner-resources/node/node-v21.0.0-linux-x64.tar.gz
+22.0.0=s3://nextgen-runner-resources/node/node-v22.0.0-linux-x64.tar.gz

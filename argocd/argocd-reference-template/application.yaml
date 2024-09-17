@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: "##APPLICATION_NAME##"
+  name: "##ARGOCD_APPLICATION_NAME##"
   namespace: argocd
   annotations:
     maintainer-name: "##MAINTAINER_NAME##"
@@ -11,8 +11,13 @@ metadata:
     git-commit-short-id: "##GIT_COMMIT_SHORT_ID##"
     pipeline-url: "##PIPELINE_URL##"
     pipeline-id: "##BUILD_VERSION##"
+    notifications.argoproj.io/subscribe.on-sync-succeeded.dora_webhook: "##ARGOCD_PROJECT_NAME##"  # Subscribes to all status changes
+    notifications.argoproj.io/subscribe.on-sync-start.dora_webhook: "##ARGOCD_PROJECT_NAME##"      # Subscribes to operation state changes
+    notifications.argoproj.io/subscribe.on-sync-failed.dora_webhook: "##ARGOCD_PROJECT_NAME##"     # Subscribes to sync status changes
+    notifications.argoproj.io/subscribe.on-health-degraded.dora_webhook: "##ARGOCD_PROJECT_NAME##" # Subscribes to health status changes
+    notifications.argoproj.io/subscribe.on-health-healthy.dora_webhook: "##ARGOCD_PROJECT_NAME##"  # Subscribes to health status changes
 spec:
-  project: default
+  project: ##ARGOCD_PROJECT_NAME##
   revisionHistoryLimit: 5  
   source:
     repoURL: "##REPO_URL##"

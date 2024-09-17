@@ -1,7 +1,9 @@
 #!/bin/bash
+set -e
 
 # Function to get the build version 
 # NOTE : Ensures version starts with a number
 function get_build_version() {
-  echo "${GITHUB_RUN_NUMBER}"
+  local version="${APP_VERSION:-$GITHUB_RUN_NUMBER}"
+  echo "${version}"
 }

@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Assuming retag_and_push.sh is in the same directory
-${SCRIPTS_PATH}/docker/docker_retag_and_push.sh
+export CICD_ACTION="retag_deploy"
+
+${SCRIPTS_PATH}/shared/initialize-customize.sh
+
+${SCRIPTS_PATH}/docker/docker_retag_push.sh
 
 ${SCRIPTS_PATH}/helm/helm_build_push.sh
 

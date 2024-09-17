@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SCRIPTS_PATH="${HOME}/actions-runner/scripts"
+set -e
 
 # Source utils.sh for utility functions
 source ${SCRIPTS_PATH}/shared/git_helpers.sh
@@ -24,7 +24,7 @@ export DOCKER_IMAGE_PUSH_PREFIX="${DOCKER_IMAGE_PUSH_PREFIX}"
 export APPLICATION_NAME="${APPLICATION_NAME:-$(get_git_repository_name)}"
 
 # IMAGE_LATEST_TAG: Use get_git_branch_name function output as default if IMAGE_LATEST_TAG is not already set
-export IMAGE_LATEST_TAG="${IMAGE_LATEST_TAG:-$(get_git_branch_name)}"
+export IMAGE_LATEST_TAG="${IMAGE_LATEST_TAG:-$(get_git_branch_prefix)}"
 
 # IMAGE_TAG: Use GITHUB_RUN_ID as default if IMAGE_TAG is not already set (for GitHub Actions pipeline run ID)
 export IMAGE_TAG="${IMAGE_TAG:-${BUILD_VERSION}}"
@@ -34,6 +34,3 @@ export DOCKER_FILE_PATH="${DOCKER_FILE_PATH:-.}"
 
 # Note: ITs used for multi-repository support, pulling from one repository and pushing to another repository - For multi-repo support
 export DOCKER_IMAGE_PULL_PREFIX="${DOCKER_IMAGE_PULL_PREFIX:-${DOCKER_IMAGE_PUSH_PREFIX}}"
-
-# Set the DOCKER_HOST environment variable
-#export DOCKER_HOST="tcp://localhost:2375"

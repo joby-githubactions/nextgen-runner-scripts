@@ -104,10 +104,10 @@ Create the name of the service account to use
 {{/*
 Create env cm variables for different env
 */}}
-{{- define "helpers.include-envfrom"}}
+{{- define "helpers.include-envfrom" }}
   {{- if .Values.##ENVIORNMENT_STAGE## }}
-    {{- $secrets := .Values.##ENVIORNMENT_STAGE##.secrets }}
     {{- $envs := .Values.##ENVIORNMENT_STAGE##.env }}
+    {{- $secrets := .Values.##ENVIORNMENT_STAGE##.secrets }}
     {{- if or $envs $secrets }}
 envFrom:
       {{- if $envs }}
@@ -118,9 +118,33 @@ envFrom:
   - secretRef:
       name: ##APPLICATION_NAME##-secrets
       {{- end }}
+    {{- end }}
+  {{- else if or .Values.envFromConfigMap .Values.envFromSecrets }}
+    {{- $envFromConfigMap := .Values.envFromConfigMap }}
+    {{- $envFromSecrets := .Values.envFromSecrets }}
+    {{- if or $envFromConfigMap $envFromSecrets }}
+envFrom:
+      {{- if $envFromConfigMap }}
+        {{- $configMaps := splitList "," $envFromConfigMap -}}
+        {{- range $index, $configMap := $configMaps -}} 
+        {{- "\n" -}}
+  - configMapRef:
+      name: {{ $configMap | trim }}
+        {{- end -}}
+      {{- end }}
+      {{- if $envFromSecrets }}
+        {{- $secrets := splitList "," $envFromSecrets -}}
+        {{- range $index, $secret := $secrets -}} 
+        {{- "\n" -}}
+  - secretRef:
+      name: {{ $secret | trim }}
+        {{- end -}}
       {{- end }}
     {{- end }}
+  {{- end }}
 {{- end }}
+
+
 
 {{/*
 Create env secret variables for secrets

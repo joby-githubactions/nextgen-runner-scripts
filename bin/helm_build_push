@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export CICD_ACTION="helm_retag_deploy"
+
+${SCRIPTS_PATH}/shared/initialize-customize.sh
+
+${SCRIPTS_PATH}/helm/helm_build_push.sh

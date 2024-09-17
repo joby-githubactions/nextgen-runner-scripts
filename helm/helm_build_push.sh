@@ -2,11 +2,14 @@
 
 set -e  # comment to avoid exit on any error
 
-#SCRIPTS_PATH="${HOME}/scripts"
-
 source ${SCRIPTS_PATH}/helm/env_variables_helm.sh
-source ${SCRIPTS_PATH}/shared/validate_variables.sh
 source ${SCRIPTS_PATH}/shared/utils.sh
+source ${SCRIPTS_PATH}/customize/auth_config.sh
+
+print_step "Helm Build and Push"
+
+#auth_config
+helm_login
 
 ###########################################################
 #
@@ -53,11 +56,15 @@ source ${SCRIPTS_PATH}/shared/utils.sh
 # Define paths
 #-----------------------CICD_RESOURCES_PATH------------------------
 helm_reference_template_folder="${SCRIPTS_PATH}/helm/helm-reference-template"
-output_folder="${ARTIFACTS_PATH}"
+output_folder="$(get_artifacts_path)"
 helm_template_folder="${output_folder}/helm-template"
 
 echo "Copying ${helm_reference_template_folder} to ${helm_template_folder}"
 
+#Remove any previous charts
+rm -rf ${output_folder}/*.tgz
+
+#Remove chart with previouse build helm
 rm -rf "${helm_template_folder}"
 mkdir -p "${helm_template_folder}"
 cp -r ${helm_reference_template_folder}/* ${helm_template_folder}
@@ -97,7 +104,7 @@ validate_variable "SOURCE_BRANCH"
 validate_variable "HELM_OCI_URL"
 
 #This will be used for custom properties for different enviornments on the deployment side
-environment_stage="${SOURCE_BRANCH}"
+environment_stage="${ENVIRONMENT_STAGE}" # TODO:// temp fix. (CONFIG_LABELS can be also used here)
 chart_version="${BUILD_VERSION}-helm"
 
 print_color "32;1" "Building Helm Template: ${helm_template_folder}"
@@ -108,8 +115,8 @@ echo "Adjusting helpers.tpl"
 _helpers_file=$helm_template_folder/templates/_helpers.tpl
 temp_helpers_file=$(mktemp /tmp/_helpers_file.tpl.XXXXXX)
 
-sed -e "s/##ENVIORNMENT_STAGE##/$environment_stage/g" \
-    -e "s/##APPLICATION_NAME##/$APPLICATION_NAME/g" \
+sed -e "s|##ENVIORNMENT_STAGE##|$environment_stage|g" \
+    -e "s|##APPLICATION_NAME##|$APPLICATION_NAME|g" \
     "$_helpers_file" > "$temp_helpers_file"
 mv "$temp_helpers_file" "$_helpers_file"
 
@@ -131,10 +138,11 @@ mv "$temp_chart_file" "$chart_yaml_file"
 echo "Adjusting values.yaml"
 # Set the path to your YAML file
 values_yaml_file=$helm_template_folder/values.yaml
-temp_file=$(mktemp /tmp/application.yaml.XXXXXX)
+temp_file=$(mktemp /tmp/values.yaml.XXXXXX)
 
-# Set default values or use actual values
+# Set default values or use actual values 
 sed -e "s/##IMAGE_REPOSITORY##/$IMAGE_REPOSITORY/g" \
+    -e "s/##PERSISTENT_VOLUME_CLAIM##/$PERSISTENT_VOLUME_CLAIM/g" \
     -e "s/##IMAGE_PULL_POLICY##/$IMAGE_PULL_POLICY/g" \
     -e "s/##IMAGE_TAG##/$IMAGE_TAG/g" \
     -e "s/##APPLICATION_HEALTH_PORT##/$APPLICATION_HEALTH_PORT/g" \
@@ -153,47 +161,64 @@ sed -e "s/##IMAGE_REPOSITORY##/$IMAGE_REPOSITORY/g" \
     -e "s/##INGRESS_HOST##/$INGRESS_HOST/g" \
         "$values_yaml_file" > "$temp_file"
 
-# Check if the INGRESS_HOST variable is set
-if [ -n "$INGRESS_HOST" ]; then
-  echo "INGRESS_HOST is set to $INGRESS_HOST"
-  # Replace the empty hosts array with the INGRESS_HOST value
-  sed -i "" "s/hosts: \[\]/hosts:\n    - \"$INGRESS_HOST\"/" "$temp_file"
-  echo "Added $INGRESS_HOST to ingress.hosts in $temp_file"
-fi
-
 # Check if the IMAGE_PULL_SECRET variable is set
 if [ -n "$IMAGE_PULL_SECRET" ]; then
   echo "IMAGE_PULL_SECRET is set to $IMAGE_PULL_SECRET"
 
   # Replace empty imagePullSecrets array with the IMAGE_PULL_SECRET value
-  sed -i "" "s/imagePullSecrets: \[\]/imagePullSecrets:\n  - $IMAGE_PULL_SECRET/" "$temp_file"
+  sed -i "s/imagePullSecrets: \[\]/imagePullSecrets:\n  - $IMAGE_PULL_SECRET/" "$temp_file"
   echo "Added $IMAGE_PULL_SECRET to imagePullSecrets in $temp_file"
 else
   echo "IMAGE_PULL_SECRET is not set. Removing imagePullSecrets from $temp_file."
   
   # Remove the entire line containing imagePullSecrets: [] from values.yaml
-  sed -i "" "/imagePullSecrets: \[\]/d" "$temp_file"
+  sed -i "/imagePullSecrets: \[\]/d" "$temp_file"
 fi
 
-###### ADDING SECRETS ##########
-echo "$environment_stage:" >> "$temp_file"
-
-echo "  secrets:" >> "$temp_file"
-secrets=$(echo "$CUSTOM_PROJECT_VARIABLES" | jq -r --arg env "$environment_stage" '.[$env].secrets')
-# Iterate over each key-value pair in dev secrets and print
-echo "$secrets" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS="=" read -r key value; do
+# WARNING! : Don't use ENVIRONMENT_STAGE JSON for custom secrets and configs maps
+if [ -n "$CUSTOM_PROJECT_VARIABLES" ]; then
+  ###### ADDING SECRETS ##########
+  echo "$environment_stage:" >> "$temp_file"
+  echo "  secrets:" >> "$temp_file"
+  
+  secrets=$(echo "$CUSTOM_PROJECT_VARIABLES" | jq -r --arg env "$environment_stage" '.[$env].secrets')
+  # Iterate over each key-value pair in secrets and print
+  echo "$secrets" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS="=" read -r key value; do
     echo "    $key: $value" >> "$temp_file"
-done
-###### END OF SECRETS ADDITION ##########
+  done
+  ###### END OF SECRETS ADDITION ##########
 
-###### ADDING CONFIGMAPS ##########
-echo "  env:" >> "$temp_file"
-envs=$(echo "$CUSTOM_PROJECT_VARIABLES" | jq -r --arg env "$environment_stage" '.[$env].envs')
-# Iterate over each key-value pair in dev secrets and print
-echo "$envs" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS="=" read -r key value; do
+  ###### ADDING CONFIGMAPS ##########
+  echo "  env:" >> "$temp_file"
+  
+  envs=$(echo "$CUSTOM_PROJECT_VARIABLES" | jq -r --arg env "$environment_stage" '.[$env].envs')
+  # Iterate over each key-value pair in envs and print
+  echo "$envs" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS="=" read -r key value; do
     echo "    $key: $value" >> "$temp_file"
-done
-###### END OF CONFIGMAPS ADDITION ##########
+  done
+  ###### END OF CONFIGMAPS ADDITION ##########
+
+else
+
+  ###### ADDING CONFIGMAP REF NAME ##########
+  # Check if CONFIG_MAP_REF_NAME variable is set
+  if [ -n "$CONFIG_MAP_REF_NAME" ]; then
+    # Append the envFromConfigMap line to the values.yaml file
+    echo "envFromConfigMap: $CONFIG_MAP_REF_NAME" >> "$temp_file"
+    echo "envFromConfigMap: $CONFIG_MAP_REF_NAME added to $temp_file"
+  fi
+  ###### END OF CONFIGMAP REF NAME ##########
+
+  ###### ADDING SECRETS REF NAME ##########
+  # Check if SECRETS_REF_NAME variable is set
+  if [ -n "$SECRETS_REF_NAME" ]; then
+    # Append the envFromSecrets line to the values.yaml file
+    echo "envFromSecrets: $SECRETS_REF_NAME" >> "$temp_file"
+    echo "envFromSecrets: $SECRETS_REF_NAME added to $temp_file"
+  fi
+  ###### END OF SECRETS REF NAME ##########
+
+fi
 
 mv "$temp_file" "$values_yaml_file"
 
@@ -222,7 +247,7 @@ print_color "32;1"  "Pushing Helm chart to $HELM_OCI_URL"
 #helm push $helm_chart $helm_oci_url
 
 if helm push $helm_chart $HELM_OCI_URL; then
-    print_color "32;1"  "Helm template has been built and pushed to the registry."
+    print_color "32;1" "Completed: Helm Build and Push"
 else
     echo "Error: Helm push failed. Terminating further process."
     exit 1

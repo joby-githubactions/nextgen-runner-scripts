@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SCRIPTS_PATH="${HOME}/scripts"
+set -e
 
 # Source utils.sh for utility functions
 source ${SCRIPTS_PATH}/shared/git_helpers.sh
@@ -65,3 +65,13 @@ export INGRESS_HOST="${INGRESS_HOST}"
 
 #Optional Image pull secret
 export IMAGE_PULL_SECRET="${IMAGE_PULL_SECRET}"
+
+#Optional config map or secret reference 
+export CONFIG_MAP_REF_NAME="${CONFIG_MAP_REF_NAME}"
+export SECRETS_REF_NAME="${SECRETS_REF_NAME}"
+
+#Remember this shouldn't contain any space or special chars like '-'
+export ENVIRONMENT_STAGE="${ENVIRONMENT_STAGE:-unknown}"
+
+#Optional persistent volume claim
+export PERSISTENT_VOLUME_CLAIM="${PERSISTENT_VOLUME_CLAIM:-}"

@@ -21,6 +21,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  ingressClassName: nginx
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}
@@ -37,20 +38,13 @@ spec:
     - host: {{ . | quote }}
       http:
         paths:
-          - path: /*
-            backend:
-              service:
-                name: ssl-redirect
-                port: use-annotation  
-    - host: {{ . | quote }}
-      http:
-        paths:
-          - path: /*
-            pathType: Prefix
-            backend:           
-              service:
-                name: {{  $fullName }}
-                port: {{ $svcPort }}
+        - backend:
+            service:
+              name: {{  $fullName }}
+              port:
+                number: {{ $svcPort }}
+          path: /
+          pathType: Prefix
     {{- end }}
   {{- end }}
   
